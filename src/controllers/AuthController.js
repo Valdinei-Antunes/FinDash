@@ -12,7 +12,7 @@ class AuthController {
 
       const usuario = results[0];
 
-      // Comparação direta (sem criptografia por enquanto, igual ao alerta-cidadão)
+    
       if (usuario.senha !== senha) {
         return res.status(401).json({ mensagem: "Senha incorreta" });
       }

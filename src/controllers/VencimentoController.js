@@ -19,7 +19,7 @@ class VencimentoController {
     });
   }
 
-  // US-009: Visualizar resumo de contas a pagar
+ 
   listar(req, res) {
     const usuario_id = req.session.usuarioId;
     if (!usuario_id) return res.status(401).json({ mensagem: "Não autenticado" });
@@ -52,7 +52,6 @@ class VencimentoController {
     });
   }
 
-  // US-008: Marcar conta como paga ou pendente
   atualizarStatus(req, res) {
     const { id } = req.params;
     const { status } = req.body;

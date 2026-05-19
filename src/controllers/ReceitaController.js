@@ -2,8 +2,6 @@ const db = require("../../db");
 
 class ReceitaController {
 
-  // US-013: Cadastrar receita
-  // Fluxo: cria transação + receita vinculada + atualiza saldo da conta
   criar(req, res) {
     const { valor, data, descricao, conta_id, categoria, previsto, recorrente } = req.body;
 
@@ -11,19 +9,18 @@ class ReceitaController {
       return res.status(400).json({ erro: "Campos obrigatórios: valor, data, conta_id" });
     }
 
-    // 1. Insere a transação
     const sqlTransacao = "INSERT INTO transacao (valor, data, descricao, conta_id) VALUES (?, ?, ?, ?)";
     db.query(sqlTransacao, [valor, data, descricao, conta_id], (err, result) => {
       if (err) return res.status(400).json({ erro: err });
 
       const transacao_id = result.insertId;
 
-      // 2. Insere a receita vinculada à transação
+    
       const sqlReceita = "INSERT INTO receita (categoria, previsto, recorrente, transacao_id) VALUES (?, ?, ?, ?)";
       db.query(sqlReceita, [categoria, previsto || valor, recorrente || false, transacao_id], (err2) => {
         if (err2) return res.status(400).json({ erro: err2 });
 
-        // 3. Atualiza o saldo da conta (regra de negócio: receita aumenta saldo)
+       
         const sqlSaldo = "UPDATE conta SET saldo = saldo + ? WHERE id = ?";
         db.query(sqlSaldo, [valor, conta_id], (err3) => {
           if (err3) return res.status(500).json({ erro: err3 });
@@ -80,7 +77,7 @@ class ReceitaController {
 
   excluir(req, res) {
     const { id } = req.params;
-    // Busca transacao_id e valor para reverter o saldo
+  
     const sqlBusca = `
       SELECT r.transacao_id, t.valor, t.conta_id
       FROM receita r JOIN transacao t ON r.transacao_id = t.id

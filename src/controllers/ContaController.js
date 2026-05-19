@@ -2,7 +2,7 @@ const db = require("../../db");
 
 class ContaController {
 
-  // US-002: Cadastrar conta/carteira
+ 
   criar(req, res) {
     const { nome, tipo, saldo } = req.body;
     const usuario_id = req.session.usuarioId;
@@ -16,7 +16,7 @@ class ContaController {
     });
   }
 
-  // US-003: Listar contas cadastradas
+
   listar(req, res) {
     const usuario_id = req.session.usuarioId;
     if (!usuario_id) return res.status(401).json({ mensagem: "Não autenticado" });

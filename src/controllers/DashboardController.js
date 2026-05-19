@@ -2,15 +2,15 @@ const db = require("../../db");
 
 class DashboardController {
 
-  // US-001: Visualizar painel financeiro
+
   resumo(req, res) {
     const usuario_id = req.session.usuarioId;
     if (!usuario_id) return res.status(401).json({ mensagem: "Não autenticado" });
 
-    // Saldo total de todas as contas
+   
     const sqlSaldo = "SELECT COALESCE(SUM(saldo), 0) AS saldo_total FROM conta WHERE usuario_id = ?";
 
-    // Total de receitas do mês atual
+    
     const sqlReceitas = `
       SELECT COALESCE(SUM(t.valor), 0) AS total_receitas
       FROM transacao t
@@ -21,7 +21,6 @@ class DashboardController {
         AND YEAR(t.data) = YEAR(CURDATE())
     `;
 
-    // Total de despesas do mês atual
     const sqlDespesas = `
       SELECT COALESCE(SUM(t.valor), 0) AS total_despesas
       FROM transacao t
@@ -32,7 +31,6 @@ class DashboardController {
         AND YEAR(t.data) = YEAR(CURDATE())
     `;
 
-    // Vencimentos pendentes nos próximos 30 dias
     const sqlVencimentos = `
       SELECT * FROM vencimento
       WHERE usuario_id = ?
@@ -65,7 +63,7 @@ class DashboardController {
     });
   }
 
-  // US-012: Exportar informações financeiras (retorna JSON completo do usuário)
+
   exportar(req, res) {
     const usuario_id = req.session.usuarioId;
     if (!usuario_id) return res.status(401).json({ mensagem: "Não autenticado" });

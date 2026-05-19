@@ -2,8 +2,7 @@ const db = require("../../db");
 
 class DespesaController {
 
-  // US-014: Registrar saída financeira
-  // Fluxo: cria transação + despesa vinculada + atualiza saldo da conta
+
   criar(req, res) {
     const { valor, data, descricao, conta_id, previsto, parcelado, categoria } = req.body;
 
@@ -11,19 +10,18 @@ class DespesaController {
       return res.status(400).json({ erro: "Campos obrigatórios: valor, data, conta_id" });
     }
 
-    // 1. Insere a transação
     const sqlTransacao = "INSERT INTO transacao (valor, data, descricao, conta_id) VALUES (?, ?, ?, ?)";
     db.query(sqlTransacao, [valor, data, descricao, conta_id], (err, result) => {
       if (err) return res.status(400).json({ erro: err });
 
       const transacao_id = result.insertId;
 
-      // 2. Insere a despesa vinculada
+    
       const sqlDespesa = "INSERT INTO despesa (previsto, parcelado, categoria, transacao_id) VALUES (?, ?, ?, ?)";
       db.query(sqlDespesa, [previsto || valor, parcelado || false, categoria, transacao_id], (err2) => {
         if (err2) return res.status(400).json({ erro: err2 });
 
-        // 3. Atualiza o saldo da conta (regra de negócio: despesa diminui saldo)
+       
         const sqlSaldo = "UPDATE conta SET saldo = saldo - ? WHERE id = ?";
         db.query(sqlSaldo, [valor, conta_id], (err3) => {
           if (err3) return res.status(500).json({ erro: err3 });

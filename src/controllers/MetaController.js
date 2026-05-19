@@ -2,7 +2,7 @@ const db = require("../../db");
 
 class MetaController {
 
-  // US-010: Acompanhar metas financeiras
+ 
   criar(req, res) {
     const { nome, valorAlvo, valorAtual, prazo } = req.body;
     const usuario_id = req.session.usuarioId;
@@ -61,7 +61,7 @@ class MetaController {
     });
   }
 
-  // Atualizar apenas o progresso (valorAtual)
+
   atualizarProgresso(req, res) {
     const { id } = req.params;
     const { valorAtual } = req.body;

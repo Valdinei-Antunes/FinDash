@@ -6,7 +6,6 @@ const db = require("../db");
 router.post("/login", AuthController.login);
 router.post("/logout", AuthController.logout);
 
-// Retorna dados do usuário logado (usado pelas páginas do frontend)
 router.get("/me", (req, res) => {
   if (!req.session.usuarioId) {
     return res.status(401).json({ mensagem: "Não autenticado" });

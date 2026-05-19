@@ -2,7 +2,7 @@ const db = require("../../db");
 
 class TransacaoController {
 
-  // US-004: Registrar transação financeira
+  
   registrar(req, res) {
     const { valor, data, descricao, conta_id } = req.body;
 
@@ -17,8 +17,6 @@ class TransacaoController {
     });
   }
 
-  // US-005: Visualizar histórico de transações
-  // US-006: Filtrar transações por tipo e período (?tipo=receita&dataInicio=2026-01-01&dataFim=2026-12-31)
   listar(req, res) {
     const { tipo, dataInicio, dataFim, conta_id } = req.query;
     const usuario_id = req.session.usuarioId;
@@ -38,7 +36,7 @@ class TransacaoController {
       params.push(conta_id);
     }
 
-    // Filtro por tipo: verifica se existe receita ou despesa vinculada
+   
     if (tipo === "receita") {
       sql += " AND EXISTS (SELECT 1 FROM receita r WHERE r.transacao_id = t.id)";
     } else if (tipo === "despesa") {
@@ -95,7 +93,7 @@ class TransacaoController {
     });
   }
 
-  // US-015: Controlar receitas e despesas (previsto x realizado)
+
   previstoRealizado(req, res) {
     const usuario_id = req.session.usuarioId;
     if (!usuario_id) return res.status(401).json({ mensagem: "Não autenticado" });
